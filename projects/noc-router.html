@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>NoC router for a 4×4 mesh, Andrew Sykes</title>
+  <meta name="description" content="A 5-port Network-on-Chip router in synthesizable Verilog with two virtual channels, round-robin arbitration, XY routing, and constrained-random verification.">
+  <meta name="theme-color" content="#f6f7f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121a17" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="NoC router for a 4×4 mesh, Andrew Sykes">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <script>document.documentElement.classList.add('js')</script>
+  <script src="../js/site.js" defer></script>
+  <script src="../js/waves-mesh.js" defer></script>
+  <script src="../js/wave-viewer.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="mark" href="../" aria-label="AS-2027, Andrew Sykes, home">AS-2027</a>
+      <nav class="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="../#projects" aria-current="page">Projects</a></li>
+          <li class="nav-hide-sm"><a href="../#experience">Experience</a></li>
+          <li><a href="../#about">About</a></li>
+          <li><a href="../AndrewSykes_Resume.pdf">Resume</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <header class="doc-head">
+      <div class="wrap">
+        <p class="crumbs t-small"><a href="../#projects">All projects</a></p>
+        <h1 class="t-display">NoC router for a 4×4 mesh</h1>
+        <p class="t-lead">A 5-port packet router in synthesizable Verilog, built for a 16-node mesh multicore in USC's VLSI System Design course.</p>
+        <dl class="specline">
+          <dt>Dates</dt><dd>Aug 2026 to present</dd>
+          <dt>Tools</dt><dd>Verilog, Icarus Verilog</dd>
+          <dt>Team</dt><dd>2 people. I designed the router, the round-robin arbiter, the internal header format, and the router testbenches. My partner built the network interface and the mesh top module.</dd>
+          <dt>Results</dt><dd>From RTL simulation. Synthesis, timing, and area come later in the course.</dd>
+        </dl>
+      </div>
+    </header>
+
+    <div class="doc-body wrap">
+
+      <section class="row" aria-labelledby="ov-h">
+        <p class="row-label t-label">Overview</p>
+        <div class="prose">
+          <h2 id="ov-h">From a ring spec to a mesh</h2>
+          <p>The course's architecture spec describes a router for a 4-node bidirectional ring: two ring directions plus a local port. This semester the target is a 4×4 mesh, so I redesigned the router for four mesh directions plus the local processing-element (PE) port.</p>
+          <p>The grader compiles our RTL unmodified against its own testbench. That fixes the top-level module, its 16 sets of node ports, the 64-bit packet format, and the local-port timing, so every internal choice had to fit those rules.</p>
+        </div>
+      </section>
+
+      <section class="row" aria-labelledby="arch-h">
+        <p class="row-label t-label">Architecture</p>
+        <div class="prose">
+          <h2 id="arch-h">Five ports, two virtual channels</h2>
+          <figure>
+            <div class="fig-frame">
+              <svg viewBox="0 0 640 310" role="img" aria-labelledby="f1">
+                <text class="dg-text-sm" x="20" y="18">Input controllers</text>
+                <text class="dg-text-sm" x="268" y="18">Crossbar</text>
+                <text class="dg-text-sm" x="436" y="18">Output controllers</text>
+                <g>
+                  <rect class="dg-box" x="20" y="30" width="170" height="44"/><text class="dg-text" x="30" y="57">PE</text><rect class="dg-node" x="110" y="40" width="30" height="24"/><rect class="dg-node" x="148" y="40" width="30" height="24"/>
+                  <rect class="dg-box" x="20" y="86" width="170" height="44"/><text class="dg-text" x="30" y="113">U2D</text><rect class="dg-node" x="110" y="96" width="30" height="24"/><rect class="dg-node" x="148" y="96" width="30" height="24"/>
+                  <rect class="dg-box" x="20" y="142" width="170" height="44"/><text class="dg-text" x="30" y="169">D2U</text><rect class="dg-node" x="110" y="152" width="30" height="24"/><rect class="dg-node" x="148" y="152" width="30" height="24"/>
+                  <rect class="dg-box" x="20" y="198" width="170" height="44"/><text class="dg-text" x="30" y="225">L2R</text><rect class="dg-node" x="110" y="208" width="30" height="24"/><rect class="dg-node" x="148" y="208" width="30" height="24"/>
+                  <rect class="dg-box" x="20" y="254" width="170" height="44"/><text class="dg-text" x="30" y="281">R2L</text><rect class="dg-node" x="110" y="264" width="30" height="24"/><rect class="dg-node" x="148" y="264" width="30" height="24"/>
+                </g>
+                <rect class="dg-box" x="250" y="30" width="140" height="268"/>
+                <g class="dg-rule"><path d="M260 52 L380 276 M260 276 L380 52 M260 108 L380 164 M260 220 L380 108 M260 164 L380 220"/></g>
+                <g>
+                  <rect class="dg-box" x="450" y="30" width="170" height="44"/><text class="dg-text" x="460" y="57">PE</text><rect class="dg-node" x="530" y="40" width="30" height="24"/><rect class="dg-node" x="568" y="40" width="30" height="24"/>
+                  <rect class="dg-box" x="450" y="86" width="170" height="44"/><text class="dg-text" x="460" y="113">U2D</text><rect class="dg-node" x="530" y="96" width="30" height="24"/><rect class="dg-node" x="568" y="96" width="30" height="24"/>
+                  <rect class="dg-box" x="450" y="142" width="170" height="44"/><text class="dg-text" x="460" y="169">D2U</text><rect class="dg-node" x="530" y="152" width="30" height="24"/><rect class="dg-node" x="568" y="152" width="30" height="24"/>
+                  <rect class="dg-box" x="450" y="198" width="170" height="44"/><text class="dg-text" x="460" y="225">L2R</text><rect class="dg-node" x="530" y="208" width="30" height="24"/><rect class="dg-node" x="568" y="208" width="30" height="24"/>
+                  <rect class="dg-box" x="450" y="254" width="170" height="44"/><text class="dg-text" x="460" y="281">R2L</text><rect class="dg-node" x="530" y="264" width="30" height="24"/><rect class="dg-node" x="568" y="264" width="30" height="24"/>
+                </g>
+                <g class="dg-line"><path d="M190 52 H250 M190 108 H250 M190 164 H250 M190 220 H250 M190 276 H250 M390 52 H450 M390 108 H450 M390 164 H450 M390 220 H450 M390 276 H450"/></g>
+              </svg>
+            </div>
+            <figcaption id="f1"><b>Figure 1.</b> Router block diagram. Each input and output controller holds one single-packet buffer per virtual channel (the two small boxes). Each output has a separate round-robin arbiter per virtual channel.</figcaption>
+          </figure>
+          <p>Each packet is one 64-bit phit, buffered whole in a single-slot buffer, so the router uses virtual cut-through with no credits. Every port has a ready/send handshake.</p>
+          <ul class="bullets">
+            <li><strong>Input controller:</strong> two VC buffers with full bits. Its ready output depends only on stored state, so it's a Moore output. It requests one output port based on the routing decision.</li>
+            <li><strong>Output controller:</strong> two VC output buffers, plus a round-robin arbiter for each VC. The grant is combinational, so a transfer finishes on the next clock edge. <code>so = buf_full &amp; ro</code> reacts to back-pressure in the same cycle.</li>
+            <li><strong>Round-robin arbiter:</strong> a parameterized N-input rotating-priority arbiter built from two barrel shifters around a fixed-priority picker. The pointer moves past the winner only when there is contention.</li>
+            <li><strong>Capacity:</strong> up to 20 packets per router (5 ports, 2 VCs, input and output buffers).</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="row" aria-labelledby="vc-h">
+        <p class="row-label t-label">Flow control</p>
+        <div class="prose">
+          <h2 id="vc-h">Time-sharing each link between two virtual channels</h2>
+          <p>A global polarity bit toggles every cycle. In each cycle, one VC moves through the crossbar inside the router while the other VC crosses the links between routers. Each link carries a packet every cycle, and an uncontended hop takes 2 cycles.</p>
+          <figure>
+            <div class="fig-frame">
+              <svg viewBox="0 0 640 190" role="img" aria-labelledby="f2">
+                <g class="dg-rule"><path d="M150 10 V180 M230 10 V180 M310 10 V180 M390 10 V180 M470 10 V180 M550 10 V180"/></g>
+                <text class="dg-text" x="20" y="40">clk</text>
+                <path class="dg-line" d="M150 25 h40 v20 h40 v-20 h40 v20 h40 v-20 h40 v20 h40 v-20 h40 v20 h40 v-20 h40 v20 h40 v-20 h30"/>
+                <text class="dg-text" x="20" y="85">polarity</text>
+                <path class="dg-line" d="M150 90 h80 v-20 h80 v20 h80 v-20 h80 v20 h80 v-20 h70"/>
+                <text class="dg-text" x="20" y="130">link</text>
+                <path class="dg-node" d="M150 115 h74 l6 10 l-6 10 h-74 z"/><text class="dg-text-sm" x="186" y="129" text-anchor="middle">even</text>
+                <path class="dg-node" d="M236 115 h68 l6 10 l-6 10 h-68 l-6 -10 z"/><text class="dg-text-sm" x="270" y="129" text-anchor="middle">odd</text>
+                <path class="dg-node" d="M316 115 h68 l6 10 l-6 10 h-68 l-6 -10 z"/><text class="dg-text-sm" x="350" y="129" text-anchor="middle">even</text>
+                <path class="dg-node" d="M396 115 h68 l6 10 l-6 10 h-68 l-6 -10 z"/><text class="dg-text-sm" x="430" y="129" text-anchor="middle">odd</text>
+                <path class="dg-node" d="M476 115 h68 l6 10 l-6 10 h-68 l-6 -10 z"/><text class="dg-text-sm" x="510" y="129" text-anchor="middle">even</text>
+                <text class="dg-text" x="20" y="170">crossbar</text>
+                <path class="dg-node" d="M150 155 h74 l6 10 l-6 10 h-74 z"/><text class="dg-text-sm" x="186" y="169" text-anchor="middle">odd</text>
+                <path class="dg-node" d="M236 155 h68 l6 10 l-6 10 h-68 l-6 -10 z"/><text class="dg-text-sm" x="270" y="169" text-anchor="middle">even</text>
+                <path class="dg-node" d="M316 155 h68 l6 10 l-6 10 h-68 l-6 -10 z"/><text class="dg-text-sm" x="350" y="169" text-anchor="middle">odd</text>
+                <path class="dg-node" d="M396 155 h68 l6 10 l-6 10 h-68 l-6 -10 z"/><text class="dg-text-sm" x="430" y="169" text-anchor="middle">even</text>
+                <path class="dg-node" d="M476 155 h68 l6 10 l-6 10 h-68 l-6 -10 z"/><text class="dg-text-sm" x="510" y="169" text-anchor="middle">odd</text>
+              </svg>
+            </div>
+            <figcaption id="f2"><b>Figure 2.</b> The link and the crossbar always serve opposite virtual channels. Simplified timing; the exact polarity-to-VC mapping follows the spec.</figcaption>
+          </figure>
+          <p>Back-pressure propagates hop by hop. A full output buffer stops granting, a full input buffer drops its ready signal, and the upstream send signal stays low until space frees up.</p>
+        </div>
+      </section>
+
+      <section class="row" aria-labelledby="rt-h">
+        <p class="row-label t-label">Routing</p>
+        <div class="prose">
+          <h2 id="rt-h">XY routing with separate hop counters</h2>
+          <p>Packets finish all X hops, then all Y hops, then eject to the PE. Dimension-order routing is deadlock-free in a mesh because no cycle of channel dependencies can form.</p>
+          <p>I replaced the spec's single direction bit and unary hop count with my own internal header. It carries separate X and Y hop counters, and each hop counts the active one down, so the remaining distance is always in the packet.</p>
+          <div class="table-wrap">
+            <table>
+              <caption><b>Table 1.</b> Routing fields: course spec compared with my internal header</caption>
+              <thead><tr><th scope="col">Field</th><th scope="col">Course spec (ring)</th><th scope="col">My header (mesh)</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Direction</th><td>1 direction bit</td><td>X and Y direction bits</td></tr>
+                <tr><th scope="row">Distance</th><td>Unary hop count</td><td>Separate 4-bit hop-X and hop-Y counters, decremented each hop</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>A code review found that packets injected in the grader's format were being misrouted. The fix is a translator at each PE port in the mesh top. It computes the internal fields when a packet is injected and restores the original format on delivery, so packets leave bit-identical to how they entered.</p>
+        </div>
+      </section>
+
+      <section class="row" aria-labelledby="ver-h">
+        <p class="row-label t-label">Verification</p>
+        <div class="prose">
+          <h2 id="ver-h">Layered, self-checking tests</h2>
+          <p>Every testbench checks its own results, so a regression shows up immediately. Testing moved from directed checks to contention, then to cycle-by-cycle handshakes, and finally to constrained-random traffic with a scoreboard keyed by packet ID.</p>
+          <div class="table-wrap">
+            <table>
+              <caption><b>Table 2.</b> Router test results, Icarus Verilog</caption>
+              <thead><tr><th scope="col">Test</th><th scope="col">What it checks</th><th scope="col">Result</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Reset</th><td>Every ready output is 1, every send is 0, polarity is 0</td><td class="pass">Pass</td></tr>
+                <tr><th scope="row">PE to every output</th><td>All paths out of the local port, on both VCs</td><td class="pass">Pass</td></tr>
+                <tr><th scope="row">Hop latency</th><td>Uncontended hop takes 2 cycles</td><td class="pass">Pass</td></tr>
+                <tr><th scope="row">Mesh paths</th><td>Every input going straight, turning X to Y, or delivering to PE</td><td class="pass">Pass</td></tr>
+                <tr><th scope="row">Contention</th><td>4 inputs requesting the PE output at once</td><td class="pass">Pass</td></tr>
+                <tr><th scope="row">Back-pressure</th><td>One output held not-ready</td><td class="pass">Pass</td></tr>
+                <tr><th scope="row">Random traffic</th><td>400 random legal packets with random stalls on every output; scoreboard checks loss, duplication, and corruption</td><td class="pass">Pass</td></tr>
+                <tr><th scope="row">Two-router handshake</th><td>Cycle-by-cycle trace with the sink stalled and released; 10 packets in order</td><td class="pass">Pass</td></tr>
+                <tr><th scope="row">Arbiter</th><td>4, then 2, then 1 requester; winner and pointer checked for each of 21 grants</td><td class="pass">Pass</td></tr>
+                <tr><th scope="row">4×4 mesh, all-to-all</th><td>240 packets across both VCs, each to the correct node</td><td class="pass">240 / 240</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="row" aria-labelledby="wave-h">
+        <p class="row-label t-label">Waveforms</p>
+        <div class="prose">
+          <h2 id="wave-h">Watch packets cross the mesh</h2>
+          <p>These are Icarus Verilog traces from four of the full 4×4 mesh tests: XY routing, both virtual channels on one link, four packets fighting for one output, and a node that stops accepting packets. Pick a numbered event to jump to it, or move the cursor to read every signal in that cycle. Packets are labeled with their ID, source, destination and VC.</p>
+        </div>
+        <figure class="row-wide">
+            <div class="wave" data-wave="WAVES_MESH" data-wave-tabs="Mesh test">
+              <p class="wave-fallback">The interactive waveform needs JavaScript. It shows four mesh tests: a packet routed from node 1 to node 14, two virtual channels sharing one link, four packets arbitrated at node 5, and node 14 holding off six packets for 40 cycles before they drain.</p>
+            </div>
+            <figcaption><b>Figure 3.</b> 4×4 mesh simulation traces, sampled just before each rising clock edge. Router rN is node N, numbered row by row from the top left; r1→r2 is the link from router 1 to router 2.</figcaption>
+        </figure>
+      </section>
+
+      <section class="row" aria-labelledby="bug-h">
+        <p class="row-label t-label">Hardest bug</p>
+        <div class="prose">
+          <h2 id="bug-h">Ready and valid must look at opposite buffers</h2>
+          <p>The input controller first used the same VC buffer for both its ready signal and its crossbar request. Because the two VCs are always in opposite phases, ready has to look at the buffer for the VC that's on the link this cycle, while the crossbar request has to look at the other one. Fixing the indexing so each signal reads its own buffer made the random-traffic test pass with no loss or duplication.</p>
+          <p>The lesson I took from it: with time-multiplexed resources, write down which phase each signal belongs to before writing the RTL.</p>
+        </div>
+      </section>
+
+      <section class="row" aria-labelledby="next-h">
+        <p class="row-label t-label">Next</p>
+        <div class="prose">
+          <h2 id="next-h">What's left</h2>
+          <ul class="bullets">
+            <li>Arbitration shown for every output with all of its inputs requesting at once.</li>
+            <li>SystemVerilog assertions and functional coverage on the router.</li>
+            <li>Synthesis with Synopsys Design Compiler, equivalence checking, timing, and place and route later in the course.</li>
+          </ul>
+          <p class="muted t-small">Source code isn't posted while the course is running, in line with USC's academic integrity policy. I'm happy to walk through the design in an interview.</p>
+        </div>
+      </section>
+
+      <nav class="next-prev" aria-label="Project pages">
+        <a class="textlink" href="../#projects">All projects</a>
+        <a class="textlink" href="simd-processor.html">Next: SIMD processor study</a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="wrap">
+      <div class="footer-grid">
+        <h2>Contact</h2>
+        <div>
+          <p>Email is the fastest way to reach me: <a href="mailto:sykes.andrew21@gmail.com">sykes.andrew21@gmail.com</a>.</p>
+          <ul class="footer-links">
+            <li><a class="btn btn-primary" href="mailto:sykes.andrew21@gmail.com">Email me</a></li>
+            <li><a class="btn" href="https://www.linkedin.com/in/atsykes">LinkedIn</a></li>
+            <li><a class="btn" href="../AndrewSykes_Resume.pdf">Resume (PDF)</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-meta t-label">
+        <span>AS-2027, Andrew Sykes</span>
+        <span>Rev. Nov 16, 2026</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

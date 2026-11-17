@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>SIMD processor study, Andrew Sykes</title>
+  <meta name="description" content="A 4-stage pipelined 64-bit SIMD processor and a five-way microarchitecture study. Version C, a multi-cycle divide unit plus a scoreboard, ran up to 15.8 times faster than the baseline.">
+  <meta name="theme-color" content="#f6f7f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121a17" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="SIMD processor study, Andrew Sykes">
+  <meta property="og:type" content="article">
+  <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <script>document.documentElement.classList.add('js')</script>
+  <script src="../js/site.js" defer></script>
+  <script src="../js/waves-data.js" defer></script>
+  <script src="../js/wave-viewer.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="mark" href="../" aria-label="AS-2027, Andrew Sykes, home">AS-2027</a>
+      <nav class="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="../#projects" aria-current="page">Projects</a></li>
+          <li class="nav-hide-sm"><a href="../#experience">Experience</a></li>
+          <li><a href="../#about">About</a></li>
+          <li><a href="../AndrewSykes_Resume.pdf">Resume</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <header class="doc-head">
+      <div class="wrap">
+        <p class="crumbs t-small"><a href="../#projects">All projects</a></p>
+        <h1 class="t-display">SIMD processor study</h1>
+        <p class="t-lead">A 4-stage pipelined 64-bit vector processor in synthesizable Verilog, and a five-way study of how to make it faster. Version C, my multi-cycle divide unit plus a scoreboard, came out on top.</p>
+        <dl class="specline">
+          <dt>Dates</dt><dd>Oct 2026 to present</dd>
+          <dt>Tools</dt><dd>Verilog, Synopsys DesignWare, Synopsys Design Compiler (FreePDK45, 45 nm), Cadence NC-Sim, Icarus Verilog</dd>
+          <dt>Team</dt><dd>2 people. We co-designed the baseline. I built its forwarding and Versions B, C, and E. My partner built Version D's issue scheduler, the 20-program benchmark testbench, and the synthesis and equivalence-checking flow. We ran the comparison together.</dd>
+          <dt>Results</dt><dd>Clock periods and areas come from Design Compiler synthesis, and cycle counts come from simulation. See the notes at the end.</dd>
+        </dl>
+      </div>
+    </header>
+
+    <div class="doc-body wrap">
+
+      <section class="row" aria-labelledby="pr-h">
+        <p class="row-label t-label">Problem</p>
+        <div class="prose">
+          <h2 id="pr-h">One slow instruction set the clock for all of them</h2>
+          <p>The baseline (Version A) is an in-order pipeline with IF, ID, EX/MEM, and WB stages. Its ALU splits each 64-bit operand into 8, 16, 32, or 64-bit lanes, and partial writes merge selected bytes into the destination register.</p>
+          <p>Division, modulo, and square root used combinational DesignWare parts inside the single-cycle ALU. The clock had to cover that path, so every instruction ran at about a 100&nbsp;ns period, even a one-cycle add. The divider was also most of the area: the ALU was about 199.6k of the baseline's 250k&nbsp;µm².</p>
+        </div>
+      </section>
+
+      <section class="row" aria-labelledby="c-h">
+        <p class="row-label t-label">Version C</p>
+        <div class="prose">
+          <h2 id="c-h">A multi-cycle divide unit and a scoreboard</h2>
+          <figure>
+            <div class="fig-frame">
+              <svg class="pipe" viewBox="0 0 470 250" role="img" aria-labelledby="f1" data-pipe>
+                <!-- forwarding paths (lit by the animation when used) -->
+                <path class="dg-rule pipe-fw" data-fw="ex" d="M290 88 V62 H190 V84"/>
+                <path class="dg-rule pipe-fw" data-fw="wb" d="M400 88 V38 H170 V84"/>
+                <text class="dg-text-sm" x="196" y="56">EX→ID forward</text>
+                <text class="dg-text-sm" x="176" y="32">WB→ID forward</text>
+                <!-- stages -->
+                <rect class="dg-box" data-stage="if" x="20" y="88" width="100" height="56"/><text class="dg-text-sm" x="26" y="101">IF</text>
+                <rect class="dg-box" data-stage="id" x="130" y="88" width="100" height="56"/><text class="dg-text-sm" x="136" y="101">ID</text>
+                <rect class="dg-box" data-stage="ex" x="240" y="88" width="100" height="56"/><text class="dg-text-sm" x="246" y="101">EX/MEM</text>
+                <rect class="dg-box" data-stage="wb" x="350" y="88" width="100" height="56"/><text class="dg-text-sm" x="356" y="101">WB</text>
+                <path class="dg-line" d="M120 116 H128 M230 116 H238 M340 116 H348"/>
+                <!-- scoreboard and SFU -->
+                <text class="dg-text-sm" x="180" y="162" text-anchor="middle" data-sb>scoreboard: no busy regs</text>
+                <path class="dg-rule" d="M180 168 V200 H238"/>
+                <rect class="dg-box" x="240" y="176" width="100" height="56"/><text class="dg-text-sm" x="246" y="189">SFU, 64-cycle</text>
+                <rect class="dg-rule" x="250" y="220" width="80" height="6"/>
+                <rect class="dg-accent" data-sfu-bar x="250" y="220" width="0" height="6"/>
+                <path class="dg-rule" data-sfu-out d="M340 204 H400 V146"/>
+                <text class="dg-text-sm" x="406" y="196">shared</text>
+                <text class="dg-text-sm" x="406" y="208">WB port</text>
+                <g data-tokens></g>
+              </svg>
+            </div>
+            <p class="pipe-note t-small" data-pipe-note aria-hidden="true">Version C: instructions keep flowing while a long DIV, SQRT or MOD runs in the SFU.</p>
+            <figcaption id="f1"><b>Figure 1.</b> Version C, simplified: an in-order 4-stage pipeline with EX-to-ID and WB-to-ID forwarding, a multi-cycle special function unit (SFU) for DIV, MOD and SQRT, and a scoreboard that lets independent instructions finish while a long operation is still running. The SFU's 64 cycles are compressed here.</figcaption>
+            <button class="fig-toggle" type="button" data-pipe-toggle hidden>Pause animation</button>
+          </figure>
+          <ul class="bullets">
+            <li><strong>Special function unit (SFU):</strong> I moved DIV, MOD, and SQRT out of the ALU into a separate unit built from sequential DesignWare dividers and square-root blocks, one per lane width. It has a start/done handshake and a latency parameter. A synthesis sweep showed a 32-cycle SFU still had an 11.16&nbsp;ns path, while 64 cycles reached 1.96&nbsp;ns, so the design uses 64.</li>
+            <li><strong>Scoreboard:</strong> instructions that don't depend on the divide keep issuing and finishing while the SFU runs. ID stalls only on a true RAW or WAW against the in-flight divide, and the SFU and the pipeline arbitrate for the writeback port.</li>
+            <li><strong>No reorder buffer needed:</strong> the ISA has no exceptions, and branches resolve in ID with no speculation, so nothing ever has to be undone. RAW and WAW checks alone keep the register state correct.</li>
+            <li><strong>Hold versus bubble:</strong> an SFU stall has to hold the divide in ID/EX, while a load-use stall has to insert a bubble there, so I split them into separate control paths.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="row" aria-labelledby="res-h">
+        <p class="row-label t-label">Results</p>
+        <div class="prose">
+          <h2 id="res-h">Five designs, timed by clock period, not just cycles</h2>
+          <p>Every version ran the same 20 benchmark programs in six categories, each checked against a reference memory dump. Execution time is cycles multiplied by the synthesized clock period, so no design can look good on cycle count alone.</p>
+          <div class="table-wrap">
+            <table>
+              <caption><b>Table 1.</b> Totals over all 20 programs. B, C, and E use a 64-cycle SFU.</caption>
+              <thead><tr><th scope="col">Version</th><th scope="col">Clock period</th><th scope="col">Area (µm²)</th><th scope="col">Cycles</th><th scope="col">Time</th><th scope="col">Speedup vs A</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">A. Baseline</th><td>≈100 ns</td><td>250k</td><td>2,784</td><td>278.3 µs</td><td>1.0×</td></tr>
+                <tr><th scope="row">D. A + issue window</th><td>≈100 ns</td><td>259k</td><td>2,651</td><td>265.0 µs</td><td>1.05×</td></tr>
+                <tr><th scope="row">B. Multi-cycle SFU</th><td>1.90 ns</td><td>189k</td><td>10,061</td><td>19.1 µs</td><td>14.6×</td></tr>
+                <tr class="is-best"><th scope="row">C. B + scoreboard</th><td>1.84 ns</td><td>192k</td><td>9,551</td><td>17.6 µs</td><td class="pass">15.8×, best</td></tr>
+                <tr><th scope="row">E. C + issue window, W=1</th><td>1.93 ns</td><td>196k</td><td>9,304</td><td>18.0 µs</td><td>15.5×</td></tr>
+                <tr><th scope="row">E. C + issue window, W=8</th><td>2.12 ns</td><td>224k</td><td>9,188</td><td>19.5 µs</td><td>14.3×</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <ul class="bullets">
+            <li><strong>Fix the critical path first.</strong> The SFU alone (B) cut the clock from about 100&nbsp;ns to 1.90&nbsp;ns and area by 24%, even though each divide now takes 64 cycles.</li>
+            <li><strong>Cheap latency hiding beat the complex option.</strong> C's scoreboard cost about 1.6% more area than B. On the divide-heavy benchmark with independent work, it cut cycles from 683 to 544 and runtime from 1,297.7&nbsp;ns to 1,001.0&nbsp;ns.</li>
+            <li><strong>Fewest cycles isn't fastest.</strong> E had about 3% fewer cycles than C, but its critical path ran from the ALU through forwarding into a taken branch that flushes the issue window. Its clock grew from 1.93&nbsp;ns to 2.12&nbsp;ns, making it 2 to 11% slower than C.</li>
+            <li><strong>Dynamic scheduling can't fix a slow clock.</strong> D saved up to 23% of cycles on branch-heavy code but only 5% overall at the same 100&nbsp;ns clock.</li>
+            <li><strong>Realistic kernel:</strong> on vector normalization, C took 2.71&nbsp;µs against the baseline's 34.6&nbsp;µs, 12.8× faster.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="row" aria-labelledby="ver-h">
+        <p class="row-label t-label">Verification</p>
+        <div class="prose">
+          <h2 id="ver-h">Forwarding and hazard checks in the baseline</h2>
+          <p>I built EX-to-ID and WB-to-ID forwarding with per-byte merging of partial writes, so only load-use hazards stall. Adding EX forwarding to a version that already had WB forwarding cut total cycles 19%, from 2,014 to 1,624, across a 16-program regression.</p>
+          <p>Self-checking testbenches run 20,024 directed and random hazard checks. To be sure they catch real problems, I injected bugs into the design on purpose and confirmed the testbenches flagged them. The baseline also passes the course regression suite in NC-Sim.</p>
+        </div>
+      </section>
+
+      <section class="row" aria-labelledby="wave-h">
+        <p class="row-label t-label">Waveforms</p>
+        <div class="prose">
+          <h2 id="wave-h">Read the simulation yourself</h2>
+          <p>These are the real Icarus Verilog traces from two test programs, one for the forwarding baseline and one for Version C. Pick a numbered event to jump to it, or move the cursor to read every signal in that cycle.</p>
+        </div>
+        <figure class="row-wide">
+            <div class="wave" data-wave>
+              <p class="wave-fallback">The interactive waveform needs JavaScript. Version A shows EX-to-ID and WB-to-ID forwarding over 18 cycles; Version C shows a divide, square root and modulo running in the SFU while the scoreboard stalls only dependent instructions, over 37 cycles.</p>
+            </div>
+            <figcaption><b>Figure 2.</b> Simulation traces, sampled just before each rising clock edge. The Version C run sets SFU_NUM_CYC to 8 instead of the full 64-cycle unit.</figcaption>
+        </figure>
+      </section>
+
+      <section class="row" aria-labelledby="notes-h">
+        <p class="row-label t-label">Notes</p>
+        <div class="prose">
+          <h2 id="notes-h">How to read these numbers</h2>
+          <ul class="bullets">
+            <li>The baseline's ≈100&nbsp;ns period is an upper bound, so speedups against it could shrink somewhat with a tighter synthesis run.</li>
+            <li>The fast designs' periods are achieved critical-path lengths with small negative slack, not signed-off timing.</li>
+            <li>Place and route and activity-annotated power come later in the course.</li>
+          </ul>
+          <p class="muted t-small">Source code isn't posted while the course is running, in line with USC's academic integrity policy. I'm happy to walk through the design in an interview.</p>
+        </div>
+      </section>
+
+      <nav class="next-prev" aria-label="Project pages">
+        <a class="textlink" href="noc-router.html">Previous: NoC router</a>
+        <a class="textlink" href="../#projects">All projects</a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="wrap">
+      <div class="footer-grid">
+        <h2>Contact</h2>
+        <div>
+          <p>Email is the fastest way to reach me: <a href="mailto:sykes.andrew21@gmail.com">sykes.andrew21@gmail.com</a>.</p>
+          <ul class="footer-links">
+            <li><a class="btn btn-primary" href="mailto:sykes.andrew21@gmail.com">Email me</a></li>
+            <li><a class="btn" href="https://www.linkedin.com/in/atsykes">LinkedIn</a></li>
+            <li><a class="btn" href="../AndrewSykes_Resume.pdf">Resume (PDF)</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-meta t-label">
+        <span>AS-2027, Andrew Sykes</span>
+        <span>Rev. Nov 16, 2026</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

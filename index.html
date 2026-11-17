@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Andrew Sykes, RTL design and verification</title>
+  <meta name="description" content="Andrew Sykes designs and verifies digital hardware in Verilog. M.S. Computer Engineering at USC, available for full-time DV, RTL, FPGA, and avionics roles in 2027.">
+  <meta name="theme-color" content="#f6f7f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121a17" media="(prefers-color-scheme: dark)">
+  <meta property="og:title" content="Andrew Sykes, RTL design and verification">
+  <meta property="og:description" content="NoC router, pipelined SIMD processor, full-custom SRAM, and hot-fire data acquisition. Available 2027.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://atsykes.com/images/og-card.png">
+  <meta property="og:url" content="https://atsykes.com/">
+  <link rel="canonical" href="https://atsykes.com/">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <script>document.documentElement.classList.add('js')</script>
+  <script src="js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="mark" href="./" aria-label="AS-2027, Andrew Sykes, home">AS-2027</a>
+      <nav class="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="#projects">Projects</a></li>
+          <li class="nav-hide-sm"><a href="#experience">Experience</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="AndrewSykes_Resume.pdf">Resume</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" aria-labelledby="name">
+      <div class="wrap hero-grid">
+        <div>
+          <h1 id="name" class="t-display">Andrew Sykes</h1>
+          <p class="t-lead">RTL design and design verification. M.S.&nbsp;Computer Engineering, USC, May&nbsp;2027.</p>
+
+          <h2 class="block-h">Features</h2>
+          <ul class="features">
+            <li>5-port Network-on-Chip router for a 4×4 mesh, verified with 400 constrained-random packets and a scoreboard</li>
+            <li>64-bit SIMD processor study: my multi-cycle divide unit and scoreboard ran up to 15.8× faster than the baseline</li>
+            <li>Full-custom 512-bit 6T SRAM and 16-bit MAC datapath in Cadence Virtuoso, DRC and LVS clean</li>
+            <li>Sole DAQ operator for liquid rocket engine hot-fire tests at the USC Liquid Propulsion Lab</li>
+          </ul>
+
+          <h2 class="block-h">Applications</h2>
+          <p class="apps">Design verification, RTL and ASIC design, FPGA, and avionics hardware. Available for full-time roles in 2027.</p>
+
+          <div class="btns">
+            <a class="btn btn-primary" href="AndrewSykes_Resume.pdf">Download resume (PDF)</a>
+            <a class="btn" href="mailto:sykes.andrew21@gmail.com">Email me</a>
+          </div>
+        </div>
+
+        <figure class="pinout">
+          <svg viewBox="0 0 400 360" role="group" aria-labelledby="fig1-cap">
+            <rect class="chip" x="130" y="20" width="140" height="320"/>
+            <path class="notch" d="M184 20 a16 16 0 0 0 32 0"/>
+            <text class="chip-pn" x="200" y="176" text-anchor="middle">AS-2027</text>
+            <text class="chip-sub" x="200" y="195" text-anchor="middle">RTL / DV</text>
+
+            <a href="projects/noc-router.html" aria-label="Pin 1, NoC router project"><g class="pin pin-g l" style="animation-delay:0ms">
+              <rect class="hit" x="20" y="42" width="110" height="36"/><line x1="100" y1="60" x2="130" y2="60"/><rect x="92" y="55" width="10" height="10"/>
+              <text class="name" x="86" y="64" text-anchor="end">NOC_RTR</text><text class="no" x="138" y="64">1</text></g></a>
+            <a href="projects/simd-processor.html" aria-label="Pin 2, SIMD processor study"><g class="pin pin-g l" style="animation-delay:60ms">
+              <rect class="hit" x="20" y="102" width="110" height="36"/><line x1="100" y1="120" x2="130" y2="120"/><rect x="92" y="115" width="10" height="10"/>
+              <text class="name" x="86" y="124" text-anchor="end">SIMD_CPU</text><text class="no" x="138" y="124">2</text></g></a>
+            <a href="#sram" aria-label="Pin 3, SRAM array project"><g class="pin pin-g l" style="animation-delay:120ms">
+              <rect class="hit" x="20" y="162" width="110" height="36"/><line x1="100" y1="180" x2="130" y2="180"/><rect x="92" y="175" width="10" height="10"/>
+              <text class="name" x="86" y="184" text-anchor="end">SRAM_6T</text><text class="no" x="138" y="184">3</text></g></a>
+            <a href="#mac" aria-label="Pin 4, MAC datapath project"><g class="pin pin-g l" style="animation-delay:180ms">
+              <rect class="hit" x="20" y="222" width="110" height="36"/><line x1="100" y1="240" x2="130" y2="240"/><rect x="92" y="235" width="10" height="10"/>
+              <text class="name" x="86" y="244" text-anchor="end">MAC_16</text><text class="no" x="138" y="244">4</text></g></a>
+            <a href="#fpga" aria-label="Pin 5, FPGA game project"><g class="pin pin-g l" style="animation-delay:240ms">
+              <rect class="hit" x="20" y="282" width="110" height="36"/><line x1="100" y1="300" x2="130" y2="300"/><rect x="92" y="295" width="10" height="10"/>
+              <text class="name" x="86" y="304" text-anchor="end">FPGA_VGA</text><text class="no" x="138" y="304">5</text></g></a>
+
+            <a href="AndrewSykes_Resume.pdf" aria-label="Pin 6, resume PDF"><g class="pin pin-g r" style="animation-delay:300ms">
+              <rect class="hit" x="270" y="282" width="110" height="36"/><line x1="270" y1="300" x2="300" y2="300"/><rect x="298" y="295" width="10" height="10"/>
+              <text class="name" x="314" y="304">RESUME</text><text class="no" x="262" y="304" text-anchor="end">6</text></g></a>
+            <a href="#about" aria-label="Pin 7, about me and marching band"><g class="pin pin-g r" style="animation-delay:360ms">
+              <rect class="hit" x="270" y="222" width="110" height="36"/><line x1="270" y1="240" x2="300" y2="240"/><rect x="298" y="235" width="10" height="10"/>
+              <text class="name" x="314" y="244">TMB_DRUM</text><text class="no" x="262" y="244" text-anchor="end">7</text></g></a>
+            <a href="#northrop" aria-label="Pin 8, Northrop Grumman internship"><g class="pin pin-g r" style="animation-delay:420ms">
+              <rect class="hit" x="270" y="162" width="110" height="36"/><line x1="270" y1="180" x2="300" y2="180"/><rect x="298" y="175" width="10" height="10"/>
+              <text class="name" x="314" y="184">NG_SCM</text><text class="no" x="262" y="184" text-anchor="end">8</text></g></a>
+            <a href="#lpl" aria-label="Pin 9, Liquid Propulsion Lab data acquisition"><g class="pin pin-g r" style="animation-delay:480ms">
+              <rect class="hit" x="270" y="102" width="110" height="36"/><line x1="270" y1="120" x2="300" y2="120"/><rect x="298" y="115" width="10" height="10"/>
+              <text class="name" x="314" y="124">LPL_DAQ</text><text class="no" x="262" y="124" text-anchor="end">9</text></g></a>
+            <a href="#contact" aria-label="Pin 10, contact"><g class="pin pin-g r" style="animation-delay:540ms">
+              <rect class="hit" x="270" y="42" width="110" height="36"/><line x1="270" y1="60" x2="300" y2="60"/><rect x="298" y="55" width="10" height="10"/>
+              <text class="name" x="314" y="64">CONTACT</text><text class="no" x="262" y="64" text-anchor="end">10</text></g></a>
+          </svg>
+
+          <!-- Phone version of the pinout: same pins, as a list -->
+          <ul class="pinrow" aria-label="Sections">
+            <li><a href="projects/noc-router.html">NOC_RTR <span class="desc">NoC router</span><span class="no">1</span></a></li>
+            <li><a href="projects/simd-processor.html">SIMD_CPU <span class="desc">SIMD processor</span><span class="no">2</span></a></li>
+            <li><a href="#lpl">LPL_DAQ <span class="desc">Rocket lab DAQ</span><span class="no">9</span></a></li>
+            <li><a href="#about">TMB_DRUM <span class="desc">About me</span><span class="no">7</span></a></li>
+            <li><a href="AndrewSykes_Resume.pdf">RESUME <span class="desc">PDF</span><span class="no">6</span></a></li>
+          </ul>
+          <figcaption id="fig1-cap"><b>Figure 1.</b> Pin configuration, top view. Each pin opens a section of this site.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ PROJECTS ============ -->
+    <section class="section" id="projects" aria-labelledby="projects-h">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="projects-h">Projects</h2>
+          <p>RTL results come from simulation in Icarus Verilog. Team projects say who built what.</p>
+        </div>
+
+        <article class="feature" aria-labelledby="noc-h">
+          <figure>
+            <div class="fig-frame">
+              <svg viewBox="0 0 400 300" role="img" aria-labelledby="fig2-cap" data-mesh>
+                <g class="mesh-links">
+                  <line class="dg-rule" x1="70" y1="50" x2="330" y2="50"/><line class="dg-rule" x1="70" y1="117" x2="330" y2="117"/>
+                  <line class="dg-rule" x1="70" y1="183" x2="330" y2="183"/><line class="dg-rule" x1="70" y1="250" x2="330" y2="250"/>
+                  <line class="dg-rule" x1="70" y1="50" x2="70" y2="250"/><line class="dg-rule" x1="157" y1="50" x2="157" y2="250"/>
+                  <line class="dg-rule" x1="243" y1="50" x2="243" y2="250"/><line class="dg-rule" x1="330" y1="50" x2="330" y2="250"/>
+                </g>
+                <path class="dg-hot" data-route d="M70 50 H243 V250"/>
+                <g>
+                  <rect class="dg-node" x="56" y="36" width="28" height="28"/><rect class="dg-node" x="143" y="36" width="28" height="28"/><rect class="dg-node" x="229" y="36" width="28" height="28"/><rect class="dg-node" x="316" y="36" width="28" height="28"/>
+                  <rect class="dg-node" x="56" y="103" width="28" height="28"/><rect class="dg-node" x="143" y="103" width="28" height="28"/><rect class="dg-node" x="229" y="103" width="28" height="28"/><rect class="dg-node" x="316" y="103" width="28" height="28"/>
+                  <rect class="dg-node" x="56" y="169" width="28" height="28"/><rect class="dg-node" x="143" y="169" width="28" height="28"/><rect class="dg-node" x="229" y="169" width="28" height="28"/><rect class="dg-node" x="316" y="169" width="28" height="28"/>
+                  <rect class="dg-node" x="56" y="236" width="28" height="28"/><rect class="dg-node" x="143" y="236" width="28" height="28"/><rect class="dg-node" x="229" y="236" width="28" height="28"/><rect class="dg-node" x="316" y="236" width="28" height="28"/>
+                </g>
+                <rect class="dg-hot-fill" data-src x="56" y="36" width="28" height="28"/>
+                <rect class="dg-node" data-dst x="229" y="236" width="28" height="28" style="stroke:var(--probe);stroke-width:3"/>
+                <rect class="dg-arrow" data-packet x="65" y="45" width="10" height="10" hidden/>
+                <text class="dg-text-sm" data-label x="200" y="290" text-anchor="middle" aria-hidden="true">src (0,0) to dst (2,3): X first, then Y</text>
+              </svg>
+            </div>
+            <figcaption id="fig2-cap"><b>Figure 2.</b> 16 routers in a 4×4 mesh. Each packet travels from a random source to a random destination with dimension-order XY routing: it finishes the X hops before any Y hop, so no cycle of channel dependencies can form.</figcaption>
+            <button class="fig-toggle" type="button" data-mesh-toggle hidden>Pause animation</button>
+          </figure>
+          <div>
+            <h3 id="noc-h">Network-on-Chip router for a 4×4 mesh multicore</h3>
+            <p class="summary">A 5-port packet router in synthesizable Verilog. The course spec described a 4-node ring, so I extended it to a 2D mesh and designed my own internal header with separate X and Y hop counters.</p>
+            <dl class="specline">
+              <dt>Design</dt><dd>2 virtual channels, round-robin arbitration, back-pressure flow control, 2-cycle hop latency</dd>
+              <dt>Verification</dt><dd>7 self-checking tests, including 400 constrained-random packets under random stalls with a scoreboard</dd>
+              <dt>Mesh result</dt><dd class="nums">240 of 240 all-to-all packets delivered with no loss, duplication, or corruption</dd>
+              <dt>My role</dt><dd>Team of 2. I owned the router, the arbiter, and router verification.</dd>
+            </dl>
+            <p class="more"><a class="textlink" href="projects/noc-router.html">Read the NoC router write-up</a></p>
+          </div>
+        </article>
+
+        <article class="feature" aria-labelledby="simd-h">
+          <figure>
+            <div class="fig-frame">
+              <svg class="pipe" viewBox="0 0 470 250" role="img" aria-labelledby="fig3-cap" data-pipe>
+                <!-- forwarding paths (lit by the animation when used) -->
+                <path class="dg-rule pipe-fw" data-fw="ex" d="M290 88 V62 H190 V84"/>
+                <path class="dg-rule pipe-fw" data-fw="wb" d="M400 88 V38 H170 V84"/>
+                <text class="dg-text-sm" x="196" y="56">EX→ID forward</text>
+                <text class="dg-text-sm" x="176" y="32">WB→ID forward</text>
+                <!-- stages -->
+                <rect class="dg-box" data-stage="if" x="20" y="88" width="100" height="56"/><text class="dg-text-sm" x="26" y="101">IF</text>
+                <rect class="dg-box" data-stage="id" x="130" y="88" width="100" height="56"/><text class="dg-text-sm" x="136" y="101">ID</text>
+                <rect class="dg-box" data-stage="ex" x="240" y="88" width="100" height="56"/><text class="dg-text-sm" x="246" y="101">EX/MEM</text>
+                <rect class="dg-box" data-stage="wb" x="350" y="88" width="100" height="56"/><text class="dg-text-sm" x="356" y="101">WB</text>
+                <path class="dg-line" d="M120 116 H128 M230 116 H238 M340 116 H348"/>
+                <!-- scoreboard and SFU -->
+                <text class="dg-text-sm" x="180" y="162" text-anchor="middle" data-sb>scoreboard: no busy regs</text>
+                <path class="dg-rule" d="M180 168 V200 H238"/>
+                <rect class="dg-box" x="240" y="176" width="100" height="56"/><text class="dg-text-sm" x="246" y="189">SFU, 64-cycle</text>
+                <rect class="dg-rule" x="250" y="220" width="80" height="6"/>
+                <rect class="dg-accent" data-sfu-bar x="250" y="220" width="0" height="6"/>
+                <path class="dg-rule" data-sfu-out d="M340 204 H400 V146"/>
+                <text class="dg-text-sm" x="406" y="196">shared</text>
+                <text class="dg-text-sm" x="406" y="208">WB port</text>
+                <g data-tokens></g>
+              </svg>
+            </div>
+            <p class="pipe-note t-small" data-pipe-note aria-hidden="true">Version C: instructions keep flowing while a long DIV, SQRT or MOD runs in the SFU.</p>
+            <figcaption id="fig3-cap"><b>Figure 3.</b> Version C, simplified: an in-order 4-stage pipeline with EX-to-ID and WB-to-ID forwarding, a multi-cycle special function unit (SFU) for DIV, MOD and SQRT, and a scoreboard that lets independent instructions finish while a long operation is still running. The SFU's 64 cycles are compressed here.</figcaption>
+            <button class="fig-toggle" type="button" data-pipe-toggle hidden>Pause animation</button>
+          </figure>
+          <div>
+            <h3 id="simd-h">64-bit SIMD processor and microarchitecture study</h3>
+            <p class="summary">A 4-stage pipelined vector processor in synthesizable Verilog. Its single-cycle divider forced every instruction onto a roughly 100&nbsp;ns clock, so a partner and I compared five redesigns. My Version C, a multi-cycle divide unit plus a scoreboard, was the fastest.</p>
+            <dl class="specline">
+              <dt>Version C</dt><dd class="nums">Up to 15.8× faster than the baseline, best of 5 designs, for 1.6% more area than the version without the scoreboard</dd>
+              <dt>Clock</dt><dd class="nums">About 100 ns down to 1.84 ns after moving DIV, MOD and SQRT into a 64-cycle SFU</dd>
+              <dt>Forwarding</dt><dd class="nums">My EX/WB-to-ID forwarding cut baseline cycles 19%, verified by 20,024 hazard checks</dd>
+              <dt>My role</dt><dd>Baseline co-designed with a partner. I built the forwarding, the SFU, the scoreboard, and the combined Version E.</dd>
+            </dl>
+            <p class="more"><a class="textlink" href="projects/simd-processor.html">Read the processor study write-up</a></p>
+          </div>
+        </article>
+
+        <article class="row" id="sram" aria-labelledby="sram-h">
+          <p class="row-label t-label">Apr 2026</p>
+          <div>
+            <h3 id="sram-h">512-bit 6T SRAM array</h3>
+            <p>Four 128-bit banks in Cadence Virtuoso with abuttable full-custom bitcell layouts, sense amplifiers, row decoders, and precharge circuitry. DRC and LVS clean.</p>
+            <dl class="specline"><dt>Tools</dt><dd>Cadence Virtuoso</dd></dl>
+          </div>
+        </article>
+        <article class="row" id="mac" aria-labelledby="mac-h">
+          <p class="row-label t-label">Dec 2025</p>
+          <div>
+            <h3 id="mac-h">16-bit multiply-accumulate datapath</h3>
+            <p>Built from custom D flip-flops, a 16-bit carry-lookahead adder, radix-4 Booth encoders, and 3:2 and 6:2 compressor trees, taken from schematic through custom layout and DRC/LVS verification.</p>
+            <dl class="specline"><dt>Tools</dt><dd>Cadence Virtuoso</dd></dl>
+          </div>
+        </article>
+        <article class="row" id="social" aria-labelledby="social-h">
+          <p class="row-label t-label">May 2026</p>
+          <div>
+            <h3 id="social-h">24hr Social: embedded automation system</h3>
+            <p>ATmega1284P firmware that coordinates RFID order tracking, ultrasonic sensing, motor control, and four dispensing stations through a finite state machine and a statically allocated circular queue.</p>
+            <dl class="specline"><dt>Tools</dt><dd>C, ATmega1284P, SPI, I²C, ADC, timers, pin-change interrupts</dd></dl>
+          </div>
+        </article>
+        <article class="row" id="fpga" aria-labelledby="fpga-h">
+          <p class="row-label t-label">Apr 2025</p>
+          <div>
+            <h3 id="fpga-h">1st Person, 2nd Row: FPGA game</h3>
+            <p>A game built entirely in hardware on a Nexys Artix-7, with one-hot FSMs for game logic, VGA output, seven-segment displays, and physical I/O.</p>
+            <dl class="specline"><dt>Tools</dt><dd>Verilog, Xilinx Vivado, QuestaSim</dd></dl>
+          </div>
+        </article>
+        <p class="also"><strong>Also:</strong> a reinforcement-learning UNO agent that raised its win rate from 2.4% to 28.3%, and a Python pipeline benchmarking distributed task schedulers (HEFT, CPoP, SDBATS) for USC's Autonomous Networks Research Group.</p>
+      </div>
+    </section>
+
+    <!-- ============ EXPERIENCE ============ -->
+    <section class="section" id="experience" aria-labelledby="exp-h">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="exp-h">Experience</h2>
+        </div>
+        <article class="row" id="lpl" aria-labelledby="lpl-h">
+          <p class="row-label t-label">Feb 2026 to present</p>
+          <div>
+            <h3 id="lpl-h">DAQ Responsible Engineer</h3>
+            <p class="org">USC Liquid Propulsion Laboratory, Los Angeles</p>
+            <ul class="bullets">
+              <li>Sole DAQ operator during liquid engine hot-fire tests, responsible for real-time data collection and data system readiness.</li>
+              <li>Troubleshoot DAQ hardware with PCB schematics and electrical measurements to isolate instrumentation, wiring, and component faults.</li>
+              <li>Joined the Data Acquisition and Avionics team in February 2026 and was promoted in April. Assembled strain-gauge circuits for propulsion tank burst tests.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+      <figure class="bleed">
+        <img class="photo" src="images/lpl-hotfire.webp" width="1280" height="549" alt="A kerosene and gaseous-oxygen torch igniter firing at dusk: a bright flame points down from the injector under the test stand, lighting the plumbing and cables around it." loading="lazy">
+        <figcaption class="wrap"><b>Figure 4.</b> Prometheus KeroGOx torch igniter hot-fire at the USC Liquid Propulsion Laboratory.</figcaption>
+      </figure>
+      <div class="wrap">
+        <article class="row" id="northrop" aria-labelledby="ng-h">
+          <p class="row-label t-label">Jun to Aug 2026</p>
+          <div>
+            <h3 id="ng-h">Global Supply Chain Intern</h3>
+            <p class="org">Northrop Grumman, El Segundo</p>
+            <ul class="bullets">
+              <li>Evaluated supplier cybersecurity against NIST SP 800-171, FAR 52.204-21, and DFARS 252.204-7012/7019/7020/7021 for handling FCI and CUI.</li>
+              <li>Worked with buyers and suppliers to close compliance gaps that were holding up purchase orders.</li>
+              <li>Helped build an internal resource site that centralizes federal cybersecurity requirements and guidance for buyers.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="row" id="research" aria-labelledby="anrg-h">
+          <p class="row-label t-label">Feb to May 2025</p>
+          <div>
+            <h3 id="anrg-h">Research Assistant</h3>
+            <p class="org">Autonomous Networks Research Group, USC</p>
+            <ul class="bullets">
+              <li>Reproduced the SDBATS scheduling algorithm and built a Python pipeline that generates DAG workloads with GPT-4o and benchmarks HEFT, CPoP, and SDBATS by makespan.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="row" id="course" aria-labelledby="cp-h">
+          <p class="row-label t-label">Aug 2024 to May 2025</p>
+          <div>
+            <h3 id="cp-h">Electrical Engineering Course Producer</h3>
+            <p class="org">USC Viterbi School of Engineering</p>
+            <ul class="bullets">
+              <li>Supported 150+ students in embedded systems through office hours, and assisted labs for 30+ students on combinational logic, sequential logic, and FSMs.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="section about" id="about" aria-labelledby="about-h">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="about-h">About</h2>
+        </div>
+        <div class="about-grid">
+          <div class="prose">
+            <p class="t-lead">I like hardware I can prove works, whether that's a router passing a random-traffic scoreboard or a DAQ system that's ready before a hot-fire countdown.</p>
+            <p>I'm finishing a B.S. in Computer Engineering and Computer Science at USC in December 2026 and continuing straight into the M.S. in Computer Engineering, graduating in May 2027. Most of my work sits close to the silicon: synthesizable Verilog, self-checking testbenches, and full-custom layout.</p>
+            <p>Away from the lab, I'm a drumline section leader in the USC Trojan Marching Band.</p>
+            <dl class="specline">
+              <dt>Education</dt><dd>M.S. Computer Engineering, May 2027. B.S. Computer Engineering and Computer Science, Dec 2026. University of Southern California.</dd>
+              <dt>Standing</dt><dd>Major GPA 3.6, Viterbi Dean's List</dd>
+              <dt>Coursework</dt><dd>VLSI System Design, MOS VLSI Design, Computer Architecture, Distributed and Embedded Systems</dd>
+              <dt>Languages</dt><dd>Verilog, C/C++, Python</dd>
+              <dt>Verification</dt><dd>Self-checking testbenches, constrained-random stimulus, scoreboarding, directed testing</dd>
+              <dt>Tools</dt><dd>Cadence Virtuoso, QuestaSim, Icarus Verilog, Xilinx Vivado, KiCad, Git</dd>
+              <dt>Hardware</dt><dd>Nexys Artix-7, ATmega1284P, Teensy, Raspberry Pi, SPI, I²C, PCB debug</dd>
+            </dl>
+          </div>
+          <div class="about-photos">
+            <figure>
+              <img class="photo ar-4x5" src="images/headshot.webp" width="960" height="1200" alt="Andrew Sykes in a dark suit and tie, smiling, in a brick arcade on the USC campus." loading="lazy">
+              <figcaption><b>Figure 5.</b> Andrew Sykes. Photo: Jasmine Ying.</figcaption>
+            </figure>
+            <figure>
+              <img class="photo ar-4x5" src="images/drumline.webp" width="767" height="959" alt="Andrew, in Trojan Marching Band uniform and helmet, drumming toward USC football player Prince Strachan, who is laughing, on the sideline at night." loading="lazy">
+              <figcaption><b>Figure 6.</b> Andrew (right) celebrating with USC's Prince Strachan after a Trojan win. Photo: Aaron Ogawa, USC El Rodeo.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="contact">
+    <div class="wrap">
+      <div class="footer-grid">
+        <h2>Contact</h2>
+        <div>
+          <p class="prose"><span>I'm looking for new-grad roles in design verification, RTL and ASIC design, FPGA, and avionics hardware starting in 2027. Email is the fastest way to reach me: <a href="mailto:sykes.andrew21@gmail.com">sykes.andrew21@gmail.com</a>.</span></p>
+          <ul class="footer-links">
+            <li><a class="btn btn-primary" href="mailto:sykes.andrew21@gmail.com">Email me</a></li>
+            <li><button class="btn" type="button" data-copy="sykes.andrew21@gmail.com" aria-describedby="copy-status">Copy email address</button></li>
+            <li><a class="btn" href="https://www.linkedin.com/in/atsykes">LinkedIn</a></li>
+            <li><a class="btn" href="AndrewSykes_Resume.pdf">Resume (PDF)</a></li>
+          </ul>
+          <p class="copy-status" id="copy-status" role="status"></p>
+        </div>
+      </div>
+      <div class="footer-meta t-label">
+        <span>AS-2027, Andrew Sykes</span>
+        <span>Rev. Nov 16, 2026</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
