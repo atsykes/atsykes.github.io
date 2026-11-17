@@ -41,7 +41,7 @@ Each placeholder is a hatched box with a comment right above it showing the exac
 
 | Placeholder | Page | File | Shape |
 | --- | --- | --- | --- |
-| Hot-fire test photo | Home, Experience | `images/lpl-hotfire.webp` | 21:9, full width |
+| Hot-fire test photo | Not shown for now (removed from Experience in Nov 2026; file kept) | `images/lpl-hotfire.webp` | 21:9, full width |
 | Headshot | Home, About | `images/headshot.webp` | 4:5 |
 | Drumline photo | Home, About | `images/drumline.webp` | 4:5 |
 | NoC waveform | NoC page | `images/noc-waveform.webp` | 16:9 |
